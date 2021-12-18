@@ -5,7 +5,10 @@
 <main>
 	<h1>Wonder tools</h1>
 	<p>The homepage is under construction ...</p>
-	<p><a href="https://github.com/wonderbeyond/">Follow me on GitHub</a></p>
+	<p>
+		<a href="https://hitup.wondertools.top/">Visit HitUP sub-site</a> OR
+		<a href="https://github.com/wonderbeyond/">Follow me on GitHub</a>
+	</p>
 </main>
 
 <style>
