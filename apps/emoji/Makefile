@@ -3,3 +3,9 @@ default:
 
 official.yaml:
 	python3 scripts/gen-emoji-data.py > official.yaml
+
+dev:
+	webpack serve
+
+build:
+	webpack --mode production

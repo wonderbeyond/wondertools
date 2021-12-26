@@ -1,3 +1,4 @@
+"""https://unicode.org/emoji/charts/full-emoji-list.html"""
 from typing import List
 import re
 from dataclasses import dataclass, asdict

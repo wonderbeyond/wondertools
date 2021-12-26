@@ -1,10 +1,11 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const sveltePreprocess = require('svelte-preprocess');
 
 module.exports = {
   mode: 'development',
-  entry: './main/index.js',
+  entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
@@ -13,16 +14,22 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js?$/,
+        test: /\.svelte$/,
+        use: [
+          // 'babel-loader',
+          {
+            loader: 'svelte-loader',
+            options: {
+              preprocess: sveltePreprocess()
+            }
+          }
+        ],
+      },
+      {
+        test: /\.(js|ts)$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
-        },
-      },
-      {
-        test: /\.svelte$/,
-        use: {
-          loader: 'svelte-loader',
         },
       },
       {
@@ -36,17 +43,16 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['.mjs', '.js', '.svelte'],
+    extensions: ['.mjs', '.js', '.ts', '.svelte'],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, 'main/index.html'),
+      template: path.resolve(__dirname, 'src/index.html'),
     }),
     new MiniCssExtractPlugin(),
   ],
   devServer: {
     historyApiFallback: true,
-    // static: path.resolve(__dirname, 'dist'),
     hot: true,
   },
 };
