@@ -40,6 +40,10 @@ module.exports = {
         test: /\.(jpg|jpeg|png|svg)$/,
         use: 'file-loader',
       },
+      {
+        test: /\.ya?ml$/,
+        use: 'yaml-loader',
+      },
     ],
   },
   resolve: {

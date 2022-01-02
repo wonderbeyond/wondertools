@@ -1,44 +1,58 @@
 <div class="margins">
-  <!--
-    Note: when you bind to `invalid`, but you only want to
-    monitor it instead of updating it yourself, you also
-    should include `updateInvalid`.
-  -->
   <Textfield
-    type="email"
-    bind:dirty
-    bind:invalid
-    updateInvalid
-    bind:value
     label="Find Emojis"
-    style="min-width: 250px;"
-    input$autocomplete="email"
-    on:focus={() => (focused = true)}
-    on:blur={() => (focused = false)}
+    variant="outlined"
+    bind:value={searchString}
+    on:focus={() => (searchBoxFocused = true)}
+    on:blur={() => (searchBoxFocused = false)}
+    on:keyup={handleSearchStringChange}
   >
-    <svelte:fragment slot="trailingIcon">
-      <Icon class="material-icons" role="button" on:click={clickHandler}>send</Icon>
-    </svelte:fragment>
+    <Icon slot="leadingIcon" class="material-icons" role="button">search</Icon>
+    <HelperText slot="helper">E.g. smile, love etc.</HelperText>
   </Textfield>
 </div>
 
-<pre class="status">
-  Focused: {focused}, Dirty: {dirty}, Invalid: {invalid}, Value: {value}
-</pre>
+
+<LayoutGrid>
+  {#each filteredChars as char, i}
+    <Cell span={1}>
+      <div class="emoji-cell" title={char.name}>{char.char}</div>
+    </Cell>
+  {/each}
+</LayoutGrid>
 
 <script lang="ts">
   import Textfield from '@smui/textfield';
-  import Icon from '@smui/textfield/icon';
   import HelperText from '@smui/textfield/helper-text';
+  import Icon from '@smui/textfield/icon';
+  import LayoutGrid, { Cell } from '@smui/layout-grid';
+  import EmojiDB, {EmojiChar, QueyParams} from './emoji-db';
 
-  let focused = false;
-  let value: string | null = null;
-  let dirty = false;
-  let invalid = false;
+  let db = new EmojiDB();
+  let searchBoxFocused = false;
+  let searchString: string | null = null;
+  let filteredChars: EmojiChar[] = [];
+  let keyDownRefilterTimout = null;
 
-  function clickHandler() {
-    alert(`Sending to ${value}!`);
-    value = null;
-    dirty = false;
+  function handleSearchStringChange(e) {
+    clearTimeout(keyDownRefilterTimout);
+    keyDownRefilterTimout = setTimeout(applyFilter, 260);
   }
+
+  function applyFilter() {
+    const params: QueyParams = {search: searchString}
+    console.log('Filtering by', params);
+    filteredChars = db.query(params);
+  }
+
+  applyFilter()
 </script>
+
+<style>
+  .emoji-cell {
+    font-size: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+</style>
