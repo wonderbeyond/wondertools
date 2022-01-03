@@ -20,6 +20,7 @@ module.exports = {
           {
             loader: 'svelte-loader',
             options: {
+              emitCss: true,
               preprocess: sveltePreprocess()
             }
           }
@@ -35,6 +36,10 @@ module.exports = {
       {
         test: /\.css$/,
         use: [MiniCssExtractPlugin.loader, 'css-loader'],
+      },
+      {
+        test: /\.s[ac]ss$/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
       },
       {
         test: /\.(jpg|jpeg|png|svg)$/,
@@ -57,6 +62,7 @@ module.exports = {
   ],
   devServer: {
     historyApiFallback: true,
+    static: path.resolve(__dirname, 'dist'),  // some dist files are not compiled by webpack.
     hot: true,
   },
 };

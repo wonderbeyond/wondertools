@@ -1,0 +1,156 @@
+@use 'sass:color';
+@use './theme';
+@use '@material/button/index' as mdc-button;
+@use '@material/elevation/mdc-elevation';
+
+// BEGIN: The missing styles from SMUI!
+.mdc-theme--primary {
+  color: theme.$primary  !important;
+  color: var(--mdc-theme-primary, theme.$primary) !important;
+}
+
+.mdc-theme--secondary {
+  color: theme.$secondary  !important;
+  color: var(--mdc-theme-secondary, theme.$secondary) !important;
+}
+
+.mdc-theme--background {
+  background-color: theme.$background;
+  background-color: var(--mdc-theme-background, theme.$background);
+}
+
+.mdc-theme--surface {
+  background-color: theme.$surface;
+  background-color: var(--mdc-theme-surface, theme.$surface);
+}
+
+.mdc-theme--error {
+  color: theme.$error  !important;
+  color: var(--mdc-theme-error, theme.$error) !important;
+}
+
+.mdc-theme--on-primary {
+  color: theme.$on-primary  !important;
+  color: var(--mdc-theme-on-primary, theme.$on-primary) !important;
+}
+
+.mdc-theme--on-secondary {
+  color: theme.$on-secondary  !important;
+  color: var(--mdc-theme-on-secondary, theme.$on-secondary) !important;
+}
+
+.mdc-theme--on-surface {
+  color: theme.$on-surface  !important;
+  color: var(--mdc-theme-on-surface, theme.$on-surface) !important;
+}
+
+.mdc-theme--on-error {
+  color: theme.$on-error  !important;
+  color: var(--mdc-theme-on-error, theme.$on-error) !important;
+}
+
+.mdc-theme--text-primary-on-background {
+  color: theme.$on-primary  !important;
+  color: var(--mdc-theme-text-primary-on-background, theme.$on-primary) !important;
+}
+
+.mdc-theme--text-secondary-on-background {
+  color: theme.$secondary  !important;
+  color: var(--mdc-theme-text-secondary-on-background, theme.$secondary) !important;
+}
+
+.mdc-theme--text-hint-on-background {
+  color: rgba(0, 0, 0, 0.38)  !important;
+  color: var(--mdc-theme-text-hint-on-background, rgba(0, 0, 0, 0.38)) !important;
+}
+
+.mdc-theme--text-disabled-on-background {
+  color: rgba(0, 0, 0, 0.38)  !important;
+  color: var(--mdc-theme-text-disabled-on-background, rgba(0, 0, 0, 0.38)) !important;
+}
+
+.mdc-theme--text-icon-on-background {
+  color: rgba(0, 0, 0, 0.38)  !important;
+  color: var(--mdc-theme-text-icon-on-background, rgba(0, 0, 0, 0.38)) !important;
+}
+
+.mdc-theme--text-primary-on-light {
+  color: rgba(0, 0, 0, 0.87)  !important;
+  color: var(--mdc-theme-text-primary-on-light, rgba(0, 0, 0, 0.87)) !important;
+}
+
+.mdc-theme--text-secondary-on-light {
+  color: rgba(0, 0, 0, 0.54)  !important;
+  color: var(--mdc-theme-text-secondary-on-light, rgba(0, 0, 0, 0.54)) !important;
+}
+
+.mdc-theme--text-hint-on-light {
+  color: rgba(0, 0, 0, 0.38)  !important;
+  color: var(--mdc-theme-text-hint-on-light, rgba(0, 0, 0, 0.38)) !important;
+}
+
+.mdc-theme--text-disabled-on-light {
+  color: rgba(0, 0, 0, 0.38)  !important;
+  color: var(--mdc-theme-text-disabled-on-light, rgba(0, 0, 0, 0.38)) !important;
+}
+
+.mdc-theme--text-icon-on-light {
+  color: rgba(0, 0, 0, 0.38)  !important;
+  color: var(--mdc-theme-text-icon-on-light, rgba(0, 0, 0, 0.38)) !important;
+}
+
+.mdc-theme--text-primary-on-dark {
+  color: white  !important;
+  color: var(--mdc-theme-text-primary-on-dark, white) !important;
+}
+
+.mdc-theme--text-secondary-on-dark {
+  color: rgba(255, 255, 255, 0.7)  !important;
+  color: var(--mdc-theme-text-secondary-on-dark, rgba(255, 255, 255, 0.7)) !important;
+}
+
+.mdc-theme--text-hint-on-dark {
+  color: rgba(255, 255, 255, 0.5)  !important;
+  color: var(--mdc-theme-text-hint-on-dark, rgba(255, 255, 255, 0.5)) !important;
+}
+
+.mdc-theme--text-disabled-on-dark {
+  color: rgba(255, 255, 255, 0.5)  !important;
+  color: var(--mdc-theme-text-disabled-on-dark, rgba(255, 255, 255, 0.5)) !important;
+}
+
+.mdc-theme--text-icon-on-dark {
+  color: rgba(255, 255, 255, 0.5)  !important;
+  color: var(--mdc-theme-text-icon-on-dark, rgba(255, 255, 255, 0.5)) !important;
+}
+
+.mdc-theme--primary-bg {
+  background-color: theme.$primary  !important;
+  background-color: var(--mdc-theme-primary, theme.$primary) !important;
+}
+
+.mdc-theme--secondary-bg {
+  background-color: theme.$secondary  !important;
+  background-color: var(--mdc-theme-secondary, theme.$secondary) !important;
+}
+// END: The missing styles from SMUI!
+
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: theme.$surface;
+  color: theme.$on-surface;
+}
+
+a {
+  color: #40b3ff;
+}
+a:visited {
+  color: color.scale(#40b3ff, $lightness: -35%);
+}
+
+.button-shaped-round {
+  @include mdc-button.shape-radius(999px);
+}

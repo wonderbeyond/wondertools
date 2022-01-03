@@ -1,5 +1,5 @@
 import App from './App.svelte';
-import 'svelte-material-ui/bare.css';
+import './global.scss';
 
 export default new App({
 	target: document.getElementById('root'),

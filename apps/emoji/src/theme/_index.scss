@@ -1,0 +1,15 @@
+@use '@material/theme/color-palette';
+
+$primary: #ee6002;
+$secondary: #FFDE03;
+$surface: #fff;
+$background: #fff;
+$error: color-palette.$red-900;
+
+@forward '@material/theme/index' with (
+  $primary: $primary,
+  $secondary: $secondary,
+  $surface: $surface,
+  $background: $background,
+  $error: $error
+);

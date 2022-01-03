@@ -146,6 +146,19 @@ class Emoji:
     status: str
 
 
+group_repr_chars = {
+    'SE': '😄',
+    'S': '💱',
+    'PB': '🙋‍♀️',
+    'TP': '🕍',
+    'AN': '🐶',
+    'C': '🦰',
+    'AC': '🎉',
+    'F': '🚩',
+    'FD': '🥑',
+    'OB': '🩰',
+}
+
 if __name__ == '__main__':
     resp = requests.get('https://unicode.org/Public/emoji/14.0/emoji-test.txt')
     resp.raise_for_status()
@@ -194,7 +207,11 @@ if __name__ == '__main__':
             data['chars'].append(asdict(emoji))
 
     data['groups'] = [
-        *({"name": g.value, "abbr": g.name} for g in GroupAbbr),
+        *({
+            "name": g.value,
+            "abbr": g.name,
+            "reprchar": group_repr_chars.get(g.name)
+        } for g in GroupAbbr),
         *({**sg, "parent": g} for g in subgroups for sg in subgroups[g]['subgroups'].values())
     ]
     print(yaml.safe_dump(data, allow_unicode=True))

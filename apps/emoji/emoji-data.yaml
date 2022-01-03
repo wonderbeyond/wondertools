@@ -47776,24 +47776,34 @@ chars:
 groups:
 - abbr: SE
   name: Smileys & Emotion
+  reprchar: 😄
 - abbr: S
   name: Symbols
+  reprchar: 💱
 - abbr: PB
   name: People & Body
+  reprchar: 🙋‍♀️
 - abbr: TP
   name: Travel & Places
+  reprchar: 🕍
 - abbr: AN
   name: Animals & Nature
+  reprchar: 🐶
 - abbr: C
   name: Component
+  reprchar: 🦰
 - abbr: AC
   name: Activities
+  reprchar: 🎉
 - abbr: F
   name: Flags
+  reprchar: 🚩
 - abbr: FD
   name: Food & Drink
+  reprchar: 🥑
 - abbr: OB
   name: Objects
+  reprchar: 🩰
 - abbr: FaS
   name: face-smiling
   parent: SE
@@ -48094,3 +48104,4 @@ groups:
 - abbr: OO
   name: other-object
   parent: OB
+

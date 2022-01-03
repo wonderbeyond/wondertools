@@ -1,17 +1,46 @@
-<div class="margins">
-  <Textfield
-    label="Find Emojis"
-    variant="outlined"
-    bind:value={searchString}
-    on:focus={() => (searchBoxFocused = true)}
-    on:blur={() => (searchBoxFocused = false)}
-    on:keyup={handleSearchStringChange}
-  >
-    <Icon slot="leadingIcon" class="material-icons" role="button">search</Icon>
-    <HelperText slot="helper">E.g. smile, love etc.</HelperText>
-  </Textfield>
-</div>
+<TopAppBar bind:this={topAppBar} variant="fixed">
+  <Row>
+    <Section style="flex:none">
+      <IconButton class="material-icons">menu</IconButton>
+      <!-- <Title>Find Emojis</Title> -->
+    </Section>
+    <Section class="search-box-container {searchBoxFocused ? 'focused': ''}">
+      <Paper
+        class="search-box"
+        elevation={searchBoxFocused ? 1 : 0}
+      >
+        <Icon class="material-icons mdc-theme--text-icon-on-background">search</Icon>
+        <Input
+          bind:value={searchString}
+          on:keyup={handleFilterFactorsChange}
+          on:focus={() => (searchBoxFocused = true)}
+          on:blur={() => (searchBoxFocused = false)}
+          placeholder="e.g. smile, love etc."
+          class="search-input"
+        />
+      </Paper>
+    </Section>
+    <Section align="start" class="group-filter-container">
+      <ChipSet chips={groupChoices} let:chip choice bind:selectedGroup
+        style="width: 100%; height: 100%; overflow: hidden"
+      >
+        <Chip {chip} on:click={(e) => {
+            selectedGroup = (selectedGroup == chip ? null : chip);
+            handleFilterFactorsChange(e);
+          }}
+          class="mdc-elevation--z{selectedGroup == chip ? 10 : 0}"
+        >
+          <ChipText>{chip.reprchar}</ChipText>
+        </Chip>
+      </ChipSet>
+    </Section>
+    <Section align="end" toolbar style="flex: none">
+      <IconButton class="material-icons" aria-label="Bookmark this page">bookmark</IconButton>
+    </Section>
+  </Row>
+</TopAppBar>
 
+<AutoAdjust {topAppBar}></AutoAdjust>
 
 <LayoutGrid>
   {#each filteredChars as char, i}
@@ -22,25 +51,39 @@
 </LayoutGrid>
 
 <script lang="ts">
-  import Textfield from '@smui/textfield';
-  import HelperText from '@smui/textfield/helper-text';
+  import TopAppBar, {
+    Row,
+    Section,
+    Title,
+    AutoAdjust,
+    TopAppBarComponentDev,
+  } from '@smui/top-app-bar';
+  import IconButton from '@smui/icon-button';
+  import { Input } from '@smui/textfield';
+  import Paper from '@smui/paper';
   import Icon from '@smui/textfield/icon';
+  import Chip, { Set as ChipSet, Text as ChipText } from '@smui/chips';
   import LayoutGrid, { Cell } from '@smui/layout-grid';
-  import EmojiDB, {EmojiChar, QueyParams} from './emoji-db';
+
+  import EmojiDB, {EmojiChar, QueyParams, EmojiGroup} from './emoji-db';
+
+  let topAppBar: TopAppBarComponentDev;
 
   let db = new EmojiDB();
   let searchBoxFocused = false;
+  let groupChoices = db.topGroups
+  let selectedGroup: EmojiGroup | null = null;
   let searchString: string | null = null;
   let filteredChars: EmojiChar[] = [];
   let keyDownRefilterTimout = null;
 
-  function handleSearchStringChange(e) {
+  function handleFilterFactorsChange(e) {
     clearTimeout(keyDownRefilterTimout);
     keyDownRefilterTimout = setTimeout(applyFilter, 260);
   }
 
   function applyFilter() {
-    const params: QueyParams = {search: searchString}
+    const params: QueyParams = {search: searchString, group: selectedGroup}
     console.log('Filtering by', params);
     filteredChars = db.query(params);
   }
@@ -48,7 +91,44 @@
   applyFilter()
 </script>
 
-<style>
+<style lang="scss">
+  @use './theme';
+
+  :global(.search-box-container) {
+    flex: 0.8 1.2 10em;
+  }
+
+  :global(.group-filter-container) {
+    flex-wrap: nowrap;
+  }
+
+  @media (max-width: 960px) {
+    :global(.group-filter-container) {
+      display: none;
+    }
+  }
+
+  :global(.search-box) {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    width: 100%;
+    height: 80%;
+    border-radius: 1.5em  !important;
+  }
+
+  :global(.search-box > *) {
+    display: inline-block;
+  }
+
+  :global(.search-input) {
+    color: var(--mdc-theme-on-surface, theme.$on-surface);
+  }
+  :global(.search-input::placeholder) {
+    color: var(--mdc-theme-on-surface, theme.$on-secondary);
+    opacity: 0.6;
+  }
+
   .emoji-cell {
     font-size: 45px;
     display: flex;
