@@ -1,13 +1,12 @@
 <TopAppBar bind:this={topAppBar} variant="fixed">
   <Row>
-    <Section style="flex:none">
-      <IconButton class="material-icons">menu</IconButton>
-      <!-- <Title>Find Emojis</Title> -->
+    <Section class="respond-to-media-lg" style="flex:none">
+      <!-- <IconButton class="material-icons">menu</IconButton> -->
+      <Title>Find Emojis</Title>
     </Section>
     <Section class="search-box-container {searchBoxFocused ? 'focused': ''}">
       <Paper
         class="search-box"
-        elevation={searchBoxFocused ? 1 : 0}
       >
         <Icon class="material-icons mdc-theme--text-icon-on-background">search</Icon>
         <Input
@@ -20,9 +19,9 @@
         />
       </Paper>
     </Section>
-    <Section align="start" class="group-filter-container">
+    <Section align="end" class="group-filter-container respond-to-media-md">
       <ChipSet chips={groupChoices} let:chip choice bind:selectedGroup
-        style="width: 100%; height: 100%; overflow: hidden"
+        style="width:100%; height:100%; justify-content:center; overflow:hidden"
       >
         <Chip {chip} on:click={(e) => {
             selectedGroup = (selectedGroup == chip ? null : chip);
@@ -34,9 +33,9 @@
         </Chip>
       </ChipSet>
     </Section>
-    <Section align="end" toolbar style="flex: none">
+    <!-- <Section align="end" toolbar style="flex: none">
       <IconButton class="material-icons" aria-label="Bookmark this page">bookmark</IconButton>
-    </Section>
+    </Section> -->
   </Row>
 </TopAppBar>
 
@@ -95,17 +94,13 @@
   @use './theme';
 
   :global(.search-box-container) {
-    flex: 0.8 1.2 10em;
+    flex: 1 1.2 20em;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
   }
 
   :global(.group-filter-container) {
     flex-wrap: nowrap;
-  }
-
-  @media (max-width: 960px) {
-    :global(.group-filter-container) {
-      display: none;
-    }
   }
 
   :global(.search-box) {

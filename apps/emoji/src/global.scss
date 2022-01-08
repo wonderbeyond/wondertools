@@ -2,6 +2,7 @@
 @use './theme';
 @use '@material/button/index' as mdc-button;
 @use '@material/elevation/mdc-elevation';
+@use 'breakpoints' as bp;
 
 // BEGIN: The missing styles from SMUI!
 .mdc-theme--primary {
@@ -153,4 +154,19 @@ a:visited {
 
 .button-shaped-round {
   @include mdc-button.shape-radius(999px);
+}
+
+$breakpoint-names: map-keys(bp.$breakpoints);
+$breakpoint-names-first: nth($breakpoint-names, 1);
+$breakpoint-names-last: nth($breakpoint-names, length($breakpoint-names));
+
+// Elements that only be shown from media above a breakpoint
+@each $bpa in $breakpoint-names {
+  @if $bpa != $breakpoint-names-first {
+    .respond-to-media-#{$bpa} {
+      @include bp.media-breakpoint-down($bpa) {
+        display: none;
+      }
+    }
+  }
 }
