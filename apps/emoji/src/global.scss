@@ -224,4 +224,5 @@ $breakpoint-names-last: nth($breakpoint-names, length($breakpoint-names));
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }

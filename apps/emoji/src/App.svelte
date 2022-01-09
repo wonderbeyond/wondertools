@@ -28,19 +28,22 @@
         bind:selectedGroup
         style="width:100%; height:100%; justify-content:center; overflow:hidden"
       >
-        <Chip {chip} on:click={async (e) => {
-            selectedGroup = (selectedGroup == chip ? null : chip);
-            await handleFilterGroupChange(e);
-          }}
-          class="mdc-elevation--z{selectedGroup == chip ? 0 : 0}"
-        >
-          <ChipText>
-            <span class="chip-text-container">
-              <span class="text">{chip.reprchar}</span>
-              {#if selectedGroup == chip}<span class="tray"></span>{/if}
-            </span>
-          </ChipText>
-        </Chip>
+        <TooltipWrapper>
+          <Chip {chip} on:click={async (e) => {
+              selectedGroup = (selectedGroup == chip ? null : chip);
+              await handleFilterGroupChange(e);
+            }}
+            class="mdc-elevation--z{selectedGroup == chip ? 0 : 0}"
+          >
+            <ChipText>
+              <span class="chip-text-container">
+                <span class="text">{chip.reprchar}</span>
+                {#if selectedGroup == chip}<span class="tray"></span>{/if}
+              </span>
+            </ChipText>
+          </Chip>
+          <Tooltip>{chip.name}</Tooltip>
+        </TooltipWrapper>
       </ChipSet>
     </Section>
     <!-- <Section align="end" toolbar style="flex: none">
@@ -58,7 +61,10 @@
 <LayoutGrid>
   {#each filteredChars as char, i}
     <Cell span={1}>
-      <div class="emoji-cell" title={char.name}>{char.char}</div>
+      <TooltipWrapper>
+        <div class="emoji-cell">{char.char}</div>
+        <Tooltip yPos="above">{char.name}</Tooltip>
+      </TooltipWrapper>
     </Cell>
   {/each}
 </LayoutGrid>
@@ -75,6 +81,7 @@
   import Paper from '@smui/paper';
   import Icon from '@smui/textfield/icon';
   import Chip, { Set as ChipSet, Text as ChipText } from '@smui/chips';
+  import Tooltip, { Wrapper as TooltipWrapper } from '@smui/tooltip';
   import LayoutGrid, { Cell } from '@smui/layout-grid';
   import LinearProgress from '@smui/linear-progress';
 
