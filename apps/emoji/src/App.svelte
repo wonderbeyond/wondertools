@@ -25,16 +25,11 @@
         chips={groupChoices}
         let:chip
         choice
-        bind:selectedGroup
+        bind:selected={selectedGroup}
         style="width:100%; height:100%; justify-content:center; overflow:hidden"
       >
         <TooltipWrapper>
-          <Chip {chip} on:click={async (e) => {
-              selectedGroup = (selectedGroup == chip ? null : chip);
-              await handleFilterGroupChange(e);
-            }}
-            class="mdc-elevation--z{selectedGroup == chip ? 0 : 0}"
-          >
+          <Chip {chip} on:click={handleFilterGroupChange}>
             <ChipText>
               <span class="chip-text-container">
                 <span class="text">{chip.reprchar}</span>
@@ -60,14 +55,33 @@
 
 <LayoutGrid>
   {#each filteredChars as char, i}
-    <Cell span={1}>
-      <TooltipWrapper>
-        <div class="emoji-cell">{char.char}</div>
-        <Tooltip yPos="above">{char.name}</Tooltip>
-      </TooltipWrapper>
+    <Cell span={1} on:click={() => {
+      activeEmoji = char;
+      showEmojiCard = true;
+    }}>
+      <div class="emoji-cell" title={char.name}>{char.char}</div>
     </Cell>
   {/each}
 </LayoutGrid>
+
+<Dialog class="emoji-card" bind:open={showEmojiCard}>
+  <div bind:clientWidth={emojiCardWidth}>
+    {#if showEmojiCard}
+      <DialogContent class="content">
+        <div
+          class="emoji-itself"
+          style="font-size:{emojiCardWidth / 3 * 0.85}px; width:{emojiCardWidth / 3}px; min-height:{emojiCardWidth / 3}px"
+        >
+          {activeEmoji.char}
+        </div>
+        <div class="emoji-properties">
+          <div class="emoji-title">{activeEmoji.name}</div>
+          <div class="mdc-typography--body1">Points: {activeEmoji.points.join(' ')}</div>
+        </div>
+      </DialogContent>
+    {/if}
+  </div>
+</Dialog>
 
 <script lang="ts">
   import TopAppBar, {
@@ -84,6 +98,9 @@
   import Tooltip, { Wrapper as TooltipWrapper } from '@smui/tooltip';
   import LayoutGrid, { Cell } from '@smui/layout-grid';
   import LinearProgress from '@smui/linear-progress';
+  import Dialog, {
+    Content as DialogContent,
+  } from '@smui/dialog';
 
   import EmojiDB, {EmojiChar, QueyParams, EmojiGroup} from './emoji-db';
 
@@ -98,6 +115,9 @@
   let searchString: string | null = null;
   let filteredChars: EmojiChar[] = [];
   let keyDownRefilterTimout = null;
+  let activeEmoji: EmojiChar = null;
+  let showEmojiCard = false;
+  let emojiCardWidth: number;
 
   async function handleSearchWordChange(e) {
     inQuery = true;

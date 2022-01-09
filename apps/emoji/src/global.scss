@@ -220,9 +220,43 @@ $breakpoint-names-last: nth($breakpoint-names, length($breakpoint-names));
 }
 
 .emoji-cell {
+  cursor: pointer;
   font-size: 45px;
+  line-height: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
+
+  transition: transform 0.1s ease-out;
+
+  &:hover {
+    transform: scale(1.15) rotate(30deg);
+  }
+}
+
+.emoji-card {
+  .content {
+    background-color: theme.$surface;
+    display: flex;
+    padding: 12px 6px;
+    align-items: center;
+
+    .emoji-itself {
+      flex: 1 1;
+      color: theme.$on-surface;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .emoji-properties {
+      flex: 2 1;
+      padding: 0 6px;
+      .emoji-title {
+        color: theme.$primary;
+        text-transform: capitalize;
+        font-weight: bolder;
+      }
+    }
+  }
 }
