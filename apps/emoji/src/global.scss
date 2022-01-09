@@ -201,6 +201,17 @@ $breakpoint-names-last: nth($breakpoint-names, length($breakpoint-names));
 
 .group-filter-container {
   flex-wrap: nowrap;
+
+  .chip-text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .tray {
+      height: 0px;
+      width: 100%;
+      border: 1px dashed theme.$primary;
+    }
+  }
 }
 
 .top-linear-progress {

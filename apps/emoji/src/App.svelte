@@ -20,16 +20,26 @@
       </Paper>
     </Section>
     <Section align="end" class="group-filter-container respond-to-media-md">
-      <ChipSet chips={groupChoices} let:chip choice bind:selectedGroup
+      <ChipSet
+        color="secondary"
+        chips={groupChoices}
+        let:chip
+        choice
+        bind:selectedGroup
         style="width:100%; height:100%; justify-content:center; overflow:hidden"
       >
         <Chip {chip} on:click={async (e) => {
             selectedGroup = (selectedGroup == chip ? null : chip);
             await handleFilterGroupChange(e);
           }}
-          class="mdc-elevation--z{selectedGroup == chip ? 10 : 0}"
+          class="mdc-elevation--z{selectedGroup == chip ? 0 : 0}"
         >
-          <ChipText>{chip.reprchar}</ChipText>
+          <ChipText>
+            <span class="chip-text-container">
+              <span class="text">{chip.reprchar}</span>
+              {#if selectedGroup == chip}<span class="tray"></span>{/if}
+            </span>
+          </ChipText>
         </Chip>
       </ChipSet>
     </Section>
