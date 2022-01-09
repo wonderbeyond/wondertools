@@ -16,7 +16,6 @@ module.exports = {
       {
         test: /\.svelte$/,
         use: [
-          // 'babel-loader',
           {
             loader: 'svelte-loader',
             options: {
@@ -60,6 +59,7 @@ module.exports = {
     }),
     new MiniCssExtractPlugin(),
   ],
+  devtool: false,
   devServer: {
     historyApiFallback: true,
     static: path.resolve(__dirname, 'dist'),  // some dist files are not compiled by webpack.

@@ -53,7 +53,7 @@ export default class EmojiDB {
     return this.groups.filter(e => !e.parent);
   }
 
-  query (params: QueyParams): EmojiChar[] {
+  async query (params: QueyParams): Promise<EmojiChar[]> {
     let finalRes = emojiData.chars;
 
     if (params.search) {
