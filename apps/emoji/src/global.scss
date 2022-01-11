@@ -235,6 +235,12 @@ $breakpoint-names-last: nth($breakpoint-names, length($breakpoint-names));
 }
 
 .emoji-card {
+  .head-bar {
+    $bar-height: 0.25em;
+    height: $bar-height;
+    background: theme.$primary;
+    background: linear-gradient(45deg, theme.$secondary, theme.$primary, theme.$secondary);
+  }
   .content {
     background-color: theme.$surface;
     display: flex;

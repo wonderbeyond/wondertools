@@ -66,6 +66,7 @@
 
 <Dialog class="emoji-card" bind:open={showEmojiCard}>
   <div bind:clientWidth={emojiCardWidth}>
+    <div class="head-bar"></div>
     {#if showEmojiCard}
       <DialogContent class="content">
         <div
@@ -100,9 +101,11 @@
   import LinearProgress from '@smui/linear-progress';
   import Dialog, {
     Content as DialogContent,
+    Title as DialogTitle,
   } from '@smui/dialog';
 
   import EmojiDB, {EmojiChar, QueyParams, EmojiGroup} from './emoji-db';
+import Dialog from '@smui/dialog/src/Dialog.svelte';
 
   let topAppBar: TopAppBarComponentDev;
 
