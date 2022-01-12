@@ -72,6 +72,7 @@
         <div
           class="emoji-itself"
           style="font-size:{emojiCardWidth / 3 * 0.85}px; width:{emojiCardWidth / 3}px; min-height:{emojiCardWidth / 3}px"
+          on:click={copyActiveEmojiToClipboard}
         >
           {activeEmoji.char}
         </div>
@@ -84,6 +85,15 @@
   </div>
 </Dialog>
 
+<Snackbar bind:this={snackbarAboutEmojiCopied} timeoutMs={4000}>
+  {#if lastCopiedEmoji}
+  <SnackbarLabel>Copied {lastCopiedEmoji.char} into system clipboard</SnackbarLabel>
+  <SnackbarActions>
+    <IconButton class="material-icons" title="Dismiss">close</IconButton>
+  </SnackbarActions>
+  {/if}
+</Snackbar>
+
 <script lang="ts">
   import TopAppBar, {
     Row,
@@ -95,6 +105,7 @@
   import { Input } from '@smui/textfield';
   import Paper from '@smui/paper';
   import Icon from '@smui/textfield/icon';
+  import IconButton from '@smui/icon-button';
   import Chip, { Set as ChipSet, Text as ChipText } from '@smui/chips';
   import Tooltip, { Wrapper as TooltipWrapper } from '@smui/tooltip';
   import LayoutGrid, { Cell } from '@smui/layout-grid';
@@ -103,11 +114,18 @@
     Content as DialogContent,
     Title as DialogTitle,
   } from '@smui/dialog';
+  import Snackbar, {
+    Label as SnackbarLabel,
+    Actions as SnackbarActions,
+    SnackbarComponentDev,
+  } from '@smui/snackbar';
+
+  import {copyToClipboard} from './utils';
 
   import EmojiDB, {EmojiChar, QueyParams, EmojiGroup} from './emoji-db';
-import Dialog from '@smui/dialog/src/Dialog.svelte';
 
   let topAppBar: TopAppBarComponentDev;
+  let snackbarAboutEmojiCopied: SnackbarComponentDev;
 
   let db = new EmojiDB();
   let groupChoices = db.topGroups
@@ -119,8 +137,18 @@ import Dialog from '@smui/dialog/src/Dialog.svelte';
   let filteredChars: EmojiChar[] = [];
   let keyDownRefilterTimout = null;
   let activeEmoji: EmojiChar = null;
+  let lastCopiedEmoji: EmojiChar = null;
   let showEmojiCard = false;
   let emojiCardWidth: number;
+
+  async function copyActiveEmojiToClipboard() {
+    if (snackbarAboutEmojiCopied) {
+      snackbarAboutEmojiCopied.close();
+    }
+    await copyToClipboard(activeEmoji.char);
+    lastCopiedEmoji = activeEmoji;
+    snackbarAboutEmojiCopied.open();
+  }
 
   async function handleSearchWordChange(e) {
     inQuery = true;
@@ -130,6 +158,7 @@ import Dialog from '@smui/dialog/src/Dialog.svelte';
       inQuery = false;
     }, 200);
   }
+
   async function handleFilterGroupChange(e) {
     inQuery = true;
     clearTimeout(keyDownRefilterTimout);

@@ -248,6 +248,7 @@ $breakpoint-names-last: nth($breakpoint-names, length($breakpoint-names));
     align-items: center;
 
     .emoji-itself {
+      cursor: pointer;
       flex: 1 1;
       color: theme.$on-surface;
       display: flex;
