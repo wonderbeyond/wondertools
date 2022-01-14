@@ -1,12 +1,12 @@
-import emojiData from '../emoji-data';
+import * as emojiData from '../emoji-data';
 import Fuse from 'fuse.js'
 
 export interface EmojiChar {
   char: string;
-  group: string;
+  group: EmojiGroup;
   name: string;
   points: string[];
-  status: string;
+  status: emojiData.StatusAbbr;
   subgroup: string;
   version: string;
 }
@@ -32,29 +32,29 @@ const fuseOptions = {
   useExtendedSearch: true,
   includeScore: false,
   threshold: 0.3,
-  keys: ["char", "name"]
+  keys: ["char", "name", "group"]
 };
 
 export default class EmojiDB {
   chars: EmojiChar[];
   charsIndexedByChar: Map<string, EmojiChar>
-  groups: EmojiGroup[];
+  topGroups: EmojiGroup[];
   fuse: Fuse<FuseMaterial>;
 
   constructor() {
     this.chars = emojiData.chars;
-    this.groups = emojiData.groups;
+    this.topGroups = emojiData.topGroups;
     this.charsIndexedByChar = new Map(this.chars.map(e => [e.char, e]));
-    const FuseMaterials = this.chars.map(e => {return {"char": e.char, "name": e.name}});
+    const FuseMaterials = this.chars.map(e => ({
+      "char": e.char,
+      "name": e.name,
+      "group": e.group.name,
+    }));
     this.fuse = new Fuse(FuseMaterials, fuseOptions);
   }
 
-  get topGroups() {
-    return this.groups.filter(e => !e.parent);
-  }
-
   async query (params: QueyParams): Promise<EmojiChar[]> {
-    let finalRes = emojiData.chars;
+    let finalRes: EmojiChar[] = this.chars;
 
     if (params.search) {
       let searched = this.fuse.search(params.search);
@@ -65,7 +65,7 @@ export default class EmojiDB {
     }
 
     if (params.group) {
-      finalRes = finalRes.filter(e => e.group == params.group.abbr);
+      finalRes = finalRes.filter(e => e.group.abbr == params.group.abbr);
     }
 
     return finalRes;
