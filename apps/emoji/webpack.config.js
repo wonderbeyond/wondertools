@@ -62,7 +62,10 @@ module.exports = {
   devtool: false,
   devServer: {
     historyApiFallback: true,
-    static: path.resolve(__dirname, 'dist'),  // some dist files are not compiled by webpack.
+    static: [
+      path.resolve(__dirname, 'dist'),    // some dist files are not compiled by webpack.
+      path.resolve(__dirname, 'public'),  // files that publish as it is.
+    ],
     hot: true,
   },
 };

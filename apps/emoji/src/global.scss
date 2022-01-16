@@ -237,8 +237,8 @@ $breakpoint-names-last: nth($breakpoint-names, length($breakpoint-names));
   justify-content: center;
   align-items: center;
 
-  &:hover {
-    animation: emoji-hover-effect 0.1s linear forwards;
+  &.active {
+    animation: emoji-hover-effect 0.1s linear;
   }
 }
 
@@ -257,6 +257,7 @@ $breakpoint-names-last: nth($breakpoint-names, length($breakpoint-names));
 
     .emoji-itself {
       user-select: none;
+      outline: 0;
       cursor: pointer;
       flex: 1 1;
       color: theme.$on-surface;

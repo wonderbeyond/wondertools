@@ -56,12 +56,12 @@
 <LayoutGrid>
   {#each filteredChars as char, i}
     <Cell span={1}>
-      <div class="emoji-cell" title={char.name}
+      <div class="emoji-cell" class:active={activeEmoji == char} title={char.name}
         use:longpress={300}
-        on:shortpress={() => {
+        on:shortpress={async e => {
           activeEmoji = char;
           showEmojiCard = true;
-        }} on:longpress={() => (
+        }} on:longpress={e => (
           activeEmoji = char,
           copyActiveEmojiToClipboard()
         )}
@@ -70,12 +70,13 @@
   {/each}
 </LayoutGrid>
 
-<Dialog class="emoji-card" bind:open={showEmojiCard}>
+<Dialog class="emoji-card" bind:open={showEmojiCard} on:SMUIDialog:closed={emojiCardClosedHook}>
   <div bind:clientWidth={emojiCardWidth}>
     <div class="head-bar"></div>
     {#if showEmojiCard}
       <DialogContent class="content">
         <div
+          tabindex=0
           class="emoji-itself"
           title="Click to copy {activeEmoji.char}"
           style="font-size:{emojiCardWidth / 3 * 0.85}px; width:{emojiCardWidth / 3}px; min-height:{emojiCardWidth / 3}px"
@@ -123,7 +124,6 @@
   import LinearProgress from '@smui/linear-progress';
   import Dialog, {
     Content as DialogContent,
-    Title as DialogTitle,
   } from '@smui/dialog';
   import Snackbar, {
     Label as SnackbarLabel,
@@ -152,6 +152,11 @@
   let lastCopiedEmoji: EmojiChar = null;
   let showEmojiCard = false;
   let emojiCardWidth: number;
+
+  async function emojiCardClosedHook(e) {
+    activeEmoji = null;
+    snackbarAboutEmojiCopied && snackbarAboutEmojiCopied.close();
+  }
 
   async function copyActiveEmojiToClipboard() {
     if (snackbarAboutEmojiCopied) {
