@@ -77,6 +77,7 @@
       <DialogContent class="content">
         <div
           class="emoji-itself"
+          title="Click to copy {activeEmoji.char}"
           style="font-size:{emojiCardWidth / 3 * 0.85}px; width:{emojiCardWidth / 3}px; min-height:{emojiCardWidth / 3}px"
           on:click={copyActiveEmojiToClipboard}
         >

@@ -219,6 +219,13 @@ $breakpoint-names-last: nth($breakpoint-names, length($breakpoint-names));
   @include linear-progress.buffer-color(theme.$surface);
 }
 
+@keyframes emoji-hover-effect {
+  from {}
+  to {
+    transform: scale(0.95) rotate(2deg);
+  }
+}
+
 .emoji-cell {
   user-select: none;
   cursor: pointer;
@@ -230,10 +237,8 @@ $breakpoint-names-last: nth($breakpoint-names, length($breakpoint-names));
   justify-content: center;
   align-items: center;
 
-  transition: transform 0.1s ease-out;
-
   &:hover {
-    transform: scale(1.15);
+    animation: emoji-hover-effect 0.1s linear forwards;
   }
 }
 
@@ -258,6 +263,10 @@ $breakpoint-names-last: nth($breakpoint-names, length($breakpoint-names));
       display: flex;
       align-items: center;
       justify-content: center;
+
+      &:hover {
+        animation: emoji-hover-effect 0.1s linear forwards;
+      }
     }
 
     .emoji-properties {
