@@ -55,11 +55,17 @@
 
 <LayoutGrid>
   {#each filteredChars as char, i}
-    <Cell span={1} on:click={() => {
-      activeEmoji = char;
-      showEmojiCard = true;
-    }}>
-      <div class="emoji-cell" title={char.name}>{char.char}</div>
+    <Cell span={1}>
+      <div class="emoji-cell" title={char.name}
+        use:longpress={300}
+        on:shortpress={() => {
+          activeEmoji = char;
+          showEmojiCard = true;
+        }} on:longpress={() => (
+          activeEmoji = char,
+          copyActiveEmojiToClipboard()
+        )}
+      >{char.char}</div>
     </Cell>
   {/each}
 </LayoutGrid>
@@ -125,6 +131,7 @@
   } from '@smui/snackbar';
 
   import {copyToClipboard} from './utils';
+  import { longpress } from './actions/longpress';
 
   import EmojiDB, {EmojiChar, QueyParams, EmojiGroup} from './emoji-db';
 
