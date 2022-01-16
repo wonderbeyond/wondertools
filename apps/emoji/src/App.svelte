@@ -78,9 +78,11 @@
         </div>
         <div class="emoji-properties">
           <div class="emoji-title">{activeEmoji.name}</div>
-          <div class="mdc-typography--body1">Points: {activeEmoji.points.join(' ')}</div>
-          <div class="mdc-typography--body1">Group: {activeEmoji.group.name}</div>
-          <div class="mdc-typography--body1">Status: {activeEmoji.status}</div>
+          <div class="emoji-points">Points: {#each activeEmoji.points as point}
+            <span class="point">{point}</span>
+            {/each}</div>
+          <div class="emoji-group">Group: {activeEmoji.group.name}</div>
+          <div class="emoji-status">Status: {activeEmoji.status}</div>
         </div>
       </DialogContent>
     {/if}
