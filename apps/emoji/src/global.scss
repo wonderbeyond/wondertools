@@ -201,6 +201,7 @@ $breakpoint-names-last: nth($breakpoint-names, length($breakpoint-names));
 
 .group-filter-container {
   flex-wrap: nowrap;
+  user-select: none;
 
   .chip-text-container {
     display: flex;
@@ -219,7 +220,20 @@ $breakpoint-names-last: nth($breakpoint-names, length($breakpoint-names));
   @include linear-progress.buffer-color(theme.$surface);
 }
 
-@keyframes emoji-hover-effect {
+@keyframes emoji-cell-hover-effect {
+  0% {}
+  50% {
+    transform: scale(1.01) rotate(-1deg);
+  }
+  100% {}
+}
+@keyframes emoji-cell-activated-effect {
+  from {}
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes emoji-incard-hover-effect {
   from {}
   to {
     transform: scale(0.95) rotate(2deg);
@@ -237,8 +251,11 @@ $breakpoint-names-last: nth($breakpoint-names, length($breakpoint-names));
   justify-content: center;
   align-items: center;
 
+  &:hover {
+    animation: emoji-cell-hover-effect 0.1s ease-out;
+  }
   &.active {
-    animation: emoji-hover-effect 0.1s linear;
+    animation: emoji-cell-activated-effect 0.25s ease-out;
   }
 }
 
@@ -266,7 +283,7 @@ $breakpoint-names-last: nth($breakpoint-names, length($breakpoint-names));
       justify-content: center;
 
       &:hover {
-        animation: emoji-hover-effect 0.1s linear forwards;
+        animation: emoji-incard-hover-effect 0.1s linear forwards;
       }
     }
 

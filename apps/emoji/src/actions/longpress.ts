@@ -1,18 +1,18 @@
 // https://svelte.dev/tutorial/adding-parameters-to-actions
 const hasTouchScreen = 'ontouchstart' in window;
 
-export function longpress(node, duration: number) {
+export function longpress(node: HTMLElement, duration: number) {
   let timer;
   let pressing = false;
   let isLong = false;
 
-  function resetState() {
+  function resetState(e?: Event) {
     isLong = false;
     pressing = false;
     clearTimeout(timer);
   }
 
-  const handlePressdown = e => {
+  function handlePressdown(e?: Event) {
     if (pressing) { return } else { pressing = true }
 
     timer = setTimeout(() => {
@@ -24,7 +24,7 @@ export function longpress(node, duration: number) {
     }, duration);
   };
 
-  const handlePressup = e => {
+  function handlePressup(e?: Event) {
     if (pressing) {
       // This is necessary, or it may caused the newly-opened
       // smui-dialog closed immediately.
@@ -43,6 +43,7 @@ export function longpress(node, duration: number) {
 
   node.addEventListener('mousedown', handlePressdown);
   node.addEventListener('mouseup', handlePressup);
+  node.addEventListener('mousemove', resetState);
   if (hasTouchScreen) {
     node.addEventListener('touchstart', handlePressdown);
     node.addEventListener('touchend', handlePressup);
@@ -54,8 +55,13 @@ export function longpress(node, duration: number) {
     destroy() {
       node.removeEventListener('mousedown', handlePressdown);
       node.removeEventListener('mouseup', handlePressup);
-      node.addEventListener('touchstart', handlePressdown);
-      node.addEventListener('touchend', handlePressup);
+      node.removeEventListener('mousemove', resetState);
+      if (hasTouchScreen) {
+        node.removeEventListener('touchstart', handlePressdown);
+        node.removeEventListener('touchend', handlePressup);
+        node.removeEventListener('touchmove', resetState);
+        node.removeEventListener('touchcancel', resetState);
+      }
     }
   };
 }
