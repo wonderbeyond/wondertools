@@ -54,18 +54,19 @@
 <AutoAdjust {topAppBar}></AutoAdjust>
 
 <LayoutGrid>
-  {#each filteredChars as char, i}
-    <Cell span={1}>
-      <div class="emoji-cell" class:active={activeEmoji == char} title={char.name}
+  {#each db.chars as emoji, i}
+    <Cell span={1}
+      class="mdc-emoji-cell {(filteredChars === undefined || filteredChars.has(emoji.char)) ? 'emoji-matched': 'emoji-not-matched'}">
+      <div class="emoji-cell" class:active={activeEmoji == emoji} title={emoji.name}
         use:longpress={300}
         on:shortpress={async e => {
-          activeEmoji = char;
+          activeEmoji = emoji;
           showEmojiCard = true;
         }} on:longpress={e => (
-          activeEmoji = char,
+          activeEmoji = emoji,
           copyActiveEmojiToClipboard()
         )}
-      >{char.char}</div>
+      >{emoji.char}</div>
     </Cell>
   {/each}
 </LayoutGrid>
@@ -146,7 +147,7 @@
   let searchBoxFocused = false;
   let selectedGroup: EmojiGroup | null = null;
   let searchString: string | null = null;
-  let filteredChars: EmojiChar[] = [];
+  let filteredChars: Set<string> | undefined;
   let keyDownRefilterTimout = null;
   let activeEmoji: EmojiChar = null;
   let lastCopiedEmoji: EmojiChar = null;
@@ -187,9 +188,7 @@
 
   async function applyFilter() {
     const params: QueyParams = {search: searchString, group: selectedGroup}
-    console.log('Filtering by', params);
+    console.debug('Filtering by', params);
     filteredChars = await db.query(params);
   }
-
-  applyFilter()
 </script>

@@ -53,7 +53,7 @@ export default class EmojiDB {
     this.fuse = new Fuse(FuseMaterials, fuseOptions);
   }
 
-  async query (params: QueyParams): Promise<EmojiChar[]> {
+  async query (params: QueyParams): Promise<Set<string>> {
     let finalRes: EmojiChar[] = this.chars;
 
     if (params.search) {
@@ -68,6 +68,6 @@ export default class EmojiDB {
       finalRes = finalRes.filter(e => e.group.abbr == params.group.abbr);
     }
 
-    return finalRes;
+    return new Set(finalRes.map(e => e.char));
   }
 }
