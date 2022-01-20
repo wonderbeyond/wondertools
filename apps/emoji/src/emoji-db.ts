@@ -53,8 +53,8 @@ export default class EmojiDB {
     this.fuse = new Fuse(FuseMaterials, fuseOptions);
   }
 
-  async query (params: QueyParams): Promise<Set<string>> {
-    let finalRes: EmojiChar[] = this.chars;
+  async query (params: QueyParams): Promise<Set<string> | undefined> {
+    let finalRes: EmojiChar[] | undefined;
 
     if (params.search) {
       let searched = this.fuse.search(params.search);
@@ -65,9 +65,10 @@ export default class EmojiDB {
     }
 
     if (params.group) {
-      finalRes = finalRes.filter(e => e.group.abbr == params.group.abbr);
+      finalRes = (finalRes || this.chars).filter(e => e.group.abbr == params.group.abbr);
     }
 
-    return new Set(finalRes.map(e => e.char));
+    // undefined result means all!
+    return finalRes ? new Set(finalRes.map(e => e.char)) : undefined;
   }
 }
