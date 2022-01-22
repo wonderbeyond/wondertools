@@ -1,75 +1,105 @@
-<TopAppBar bind:this={topAppBar} variant="fixed">
-  <Row>
-    <Section class="respond-to-media-lg" style="flex:none">
-      <!-- <IconButton class="material-icons">menu</IconButton> -->
-      <Title>Find Emojis</Title>
-    </Section>
-    <Section class="search-box-container {searchBoxFocused ? 'focused': ''}">
-      <Paper
-        class="search-box"
-      >
-        <Icon class="material-icons mdc-theme--text-icon-on-background">search</Icon>
-        <Input
-          bind:value={searchString}
-          on:keyup={handleSearchWordChange}
-          on:focus={() => (searchBoxFocused = true)}
-          on:blur={() => (searchBoxFocused = false)}
-          placeholder="e.g. smile, love etc."
-          class="search-input"
-        />
-      </Paper>
-    </Section>
-    <Section align="end" class="group-filter-container respond-to-media-md">
-      <ChipSet
-        color="secondary"
-        chips={groupChoices}
-        let:chip
-        choice
-        bind:selected={selectedGroup}
-        style="width:100%; height:100%; justify-content:center; overflow:hidden"
-      >
-        <TooltipWrapper>
-          <Chip {chip} on:click={handleFilterGroupChange}>
-            <ChipText>
-              <span class="chip-text-container">
-                <span class="text">{chip.reprchar}</span>
-                {#if selectedGroup == chip}<span class="tray"></span>{/if}
-              </span>
-            </ChipText>
-          </Chip>
-          <Tooltip>{chip.name}</Tooltip>
-        </TooltipWrapper>
-      </ChipSet>
-    </Section>
-    <!-- <Section align="end" toolbar style="flex: none">
-      <IconButton class="material-icons" aria-label="Bookmark this page">bookmark</IconButton>
-    </Section> -->
-  </Row>
+<Drawer variant="modal" bind:open={drawerOpen}>
+  <DrawerHeader>
+    <DrawerTitle>Find Emojis</DrawerTitle>
+  </DrawerHeader>
+  <DrawerContent>
+    <List>
+      <ListSubheader component={H6}>Filter By Group</ListSubheader>
+      <ListItem activated={!selectedGroup} on:SMUI:action={e => {
+          selectedGroup = null;
+          drawerOpen = false;
+          handleFilterGroupChange(e);
+        }}>
+        <ListText>All Groups</ListText>
+      </ListItem>
+      {#each groupChoices as group}
+        <ListItem activated={group === selectedGroup} on:SMUI:action={e => {
+          selectedGroup = group;
+          drawerOpen = false;
+          handleFilterGroupChange(e);
+        }}>
+          <ListText>{group.reprchar} {group.name}</ListText>
+        </ListItem>
+      {/each}
+      </List>
+  </DrawerContent>
+</Drawer>
 
-  {#if inQuery}
-    <LinearProgress class="top-linear-progress" indeterminate />
-  {/if}
-</TopAppBar>
+<DrawerScrim />
 
-<AutoAdjust {topAppBar}></AutoAdjust>
+<DrawerAppContent>
+  <TopAppBar bind:this={topAppBar} variant="fixed">
+    <Row>
+      <Section class="respond-above-media-lg" style="flex:none">
+        <Title>Find Emojis</Title>
+      </Section>
+      <Section class="search-box-container {searchBoxFocused ? 'focused': ''}">
+        <Paper
+          class="search-box"
+        >
+          <Icon class="material-icons mdc-theme--text-icon-on-background">search</Icon>
+          <Input
+            bind:value={searchString}
+            on:keyup={handleSearchWordChange}
+            on:focus={() => (searchBoxFocused = true)}
+            on:blur={() => (searchBoxFocused = false)}
+            placeholder="e.g. smile, love etc."
+            class="search-input"
+          />
+        </Paper>
+      </Section>
+      <Section align="end" class="group-filter-container respond-above-media-md">
+        <ChipSet
+          color="secondary"
+          chips={groupChoices}
+          let:chip
+          choice
+          bind:selected={selectedGroup}
+          style="width:100%; height:100%; justify-content:center; overflow:hidden"
+        >
+          <TooltipWrapper>
+            <Chip {chip} on:click={handleFilterGroupChange}>
+              <ChipText>
+                <span class="chip-text-container">
+                  <span class="text">{chip.reprchar}</span>
+                  {#if selectedGroup == chip}<span class="tray"></span>{/if}
+                </span>
+              </ChipText>
+            </Chip>
+            <Tooltip>{chip.name}</Tooltip>
+          </TooltipWrapper>
+        </ChipSet>
+      </Section>
+      <Section align="end" toolbar class="respond-under-media-md">
+        <IconButton class="material-icons" on:click={e => drawerOpen = true}>menu</IconButton>
+      </Section>
+    </Row>
 
-<LayoutGrid>
-  {#each db.chars as emoji, i}
-    <Cell span={1}
-      class="mdc-emoji-cell {(filteredChars === undefined || filteredChars.has(emoji.char)) ? 'emoji-matched': 'emoji-not-matched'}">
-      <div class="emoji-cell" class:active={activeEmoji == emoji} title={emoji.name}
-        use:longpress={300}
-        on:shortpress={async e => {
-          activeEmoji = emoji;
-          showEmojiCard = true;
-        }} on:longpress={e => (
-          activeEmoji = emoji,
-          copyActiveEmojiToClipboard()
-        )}
-      >{emoji.char}</div>
-    </Cell>
-  {/each}
-</LayoutGrid>
+    {#if inQuery}
+      <LinearProgress class="top-linear-progress" indeterminate />
+    {/if}
+  </TopAppBar>
+
+  <AutoAdjust {topAppBar}></AutoAdjust>
+
+  <LayoutGrid>
+    {#each db.chars as emoji, i}
+      <Cell span={1}
+        class="mdc-emoji-cell {(filteredChars === undefined || filteredChars.has(emoji.char)) ? 'emoji-matched': 'emoji-not-matched'}">
+        <div class="emoji-cell" class:active={activeEmoji == emoji} title={emoji.name}
+          use:longpress={300}
+          on:shortpress={async e => {
+            activeEmoji = emoji;
+            showEmojiCard = true;
+          }} on:longpress={e => (
+            activeEmoji = emoji,
+            copyActiveEmojiToClipboard()
+          )}
+        >{emoji.char}</div>
+      </Cell>
+    {/each}
+  </LayoutGrid>
+</DrawerAppContent>
 
 <Dialog class="emoji-card" bind:open={showEmojiCard} on:SMUIDialog:closed={emojiCardClosedHook}>
   <div bind:clientWidth={emojiCardWidth}>
@@ -108,6 +138,7 @@
 </Snackbar>
 
 <script lang="ts">
+  import { H6 } from '@smui/common/elements';
   import TopAppBar, {
     Row,
     Section,
@@ -115,6 +146,18 @@
     AutoAdjust,
     TopAppBarComponentDev,
   } from '@smui/top-app-bar';
+  import Drawer, {
+    AppContent as DrawerAppContent,
+    Header as DrawerHeader,
+    Title as DrawerTitle,
+    Content as DrawerContent,
+    Scrim as DrawerScrim,
+  } from '@smui/drawer';
+  import List, {
+    Item as ListItem,
+    Text as ListText,
+    Subheader as  ListSubheader,
+  } from '@smui/list';
   import { Input } from '@smui/textfield';
   import Paper from '@smui/paper';
   import Icon from '@smui/textfield/icon';
@@ -143,6 +186,7 @@
   let db = new EmojiDB();
   let groupChoices = db.topGroups
 
+  let drawerOpen = false;
   let inQuery = false;
   let searchBoxFocused = false;
   let selectedGroup: EmojiGroup | null = null;
