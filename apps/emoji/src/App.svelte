@@ -98,7 +98,7 @@
   </div>
 </Dialog>
 
-<Snackbar bind:this={snackbarAboutEmojiCopied} timeoutMs={4000}>
+<Snackbar bind:this={snackbarAboutEmojiCopied}>
   {#if lastCopiedEmoji}
   <SnackbarLabel>Copied {lastCopiedEmoji.char} into system clipboard</SnackbarLabel>
   <SnackbarActions>
