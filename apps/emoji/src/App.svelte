@@ -33,19 +33,22 @@
       <Section class="respond-above-media-lg" style="flex:none">
         <Title>Find Emojis</Title>
       </Section>
-      <Section class="search-box-container {searchBoxFocused ? 'focused': ''}">
+      <Section class="search-box-container">
         <Paper
           class="search-box"
         >
-          <Icon class="material-icons mdc-theme--text-icon-on-background">search</Icon>
-          <Input
+          <TextfieldIcon class="material-icons mdc-theme--text-icon-on-background">search</TextfieldIcon>
+          <Input class="search-input"
             bind:value={searchString}
             on:keyup={handleSearchWordChange}
             on:focus={() => (searchBoxFocused = true)}
             on:blur={() => (searchBoxFocused = false)}
             placeholder="e.g. smile, love etc."
-            class="search-input"
           />
+          {#if searchString}
+          <Icon class="material-icons clear-icon"
+            role="button" on:click={clearSearchInput}>clear</Icon>
+          {/if}
         </Paper>
       </Section>
       <Section align="end" class="group-filter-container respond-above-media-md">
@@ -139,6 +142,7 @@
 
 <script lang="ts">
   import { H6 } from '@smui/common/elements';
+  import { Icon } from '@smui/common';
   import TopAppBar, {
     Row,
     Section,
@@ -159,8 +163,8 @@
     Subheader as  ListSubheader,
   } from '@smui/list';
   import { Input } from '@smui/textfield';
+  import TextfieldIcon from '@smui/textfield/icon';
   import Paper from '@smui/paper';
-  import Icon from '@smui/textfield/icon';
   import IconButton from '@smui/icon-button';
   import Chip, { Set as ChipSet, Text as ChipText } from '@smui/chips';
   import Tooltip, { Wrapper as TooltipWrapper } from '@smui/tooltip';
@@ -219,6 +223,11 @@
       await applyFilter();
       inQuery = false;
     }, 200);
+  }
+
+  async function clearSearchInput(e) {
+    searchString = null;
+    await handleFilterGroupChange(e);
   }
 
   async function handleFilterGroupChange(e) {

@@ -207,6 +207,17 @@ $breakpoint-names-last: nth($breakpoint-names, length($breakpoint-names));
         opacity: 0.6;
       }
     }
+
+    .clear-icon {
+      cursor: pointer;
+      padding: 0;
+      margin: 12px;
+      color: var(--mdc-theme-on-surface, theme.$on-secondary);
+      opacity: 0.5;
+      &:hover {
+        opacity: 0.8;
+      }
+    }
   }
 }
 
