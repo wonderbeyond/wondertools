@@ -139,7 +139,6 @@
 </Snackbar>
 
 <script lang="ts">
-  import { H6 } from '@smui/common/elements';
   import { Icon } from '@smui/common';
   import TopAppBar, {
     Row,
@@ -160,7 +159,6 @@
     Item as ListItem,
     Graphic as ListGraphic,
     Text as ListText,
-    Subheader as  ListSubheader,
   } from '@smui/list';
   import { Input } from '@smui/textfield';
   import TextfieldIcon from '@smui/textfield/icon';
@@ -247,7 +245,7 @@
 
   async function applyFilter() {
     const params: QueyParams = {search: searchString, group: selectedGroup}
-    console.debug('Filtering by', params);
+    // console.debug('Filtering by', params);
     filteredChars = await db.query(params);
   }
 </script>

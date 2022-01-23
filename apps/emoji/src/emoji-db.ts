@@ -58,7 +58,6 @@ export default class EmojiDB {
 
     if (params.search) {
       let searched = this.fuse.search(params.search);
-      console.log('Searched:', searched.length)
       finalRes = searched.map(
         e => this.charsIndexedByChar.get(e.item.char)
       );
