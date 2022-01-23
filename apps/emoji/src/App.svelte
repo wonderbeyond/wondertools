@@ -1,25 +1,23 @@
 <Drawer variant="modal" bind:open={drawerOpen}>
   <DrawerHeader>
     <DrawerTitle>Find Emojis</DrawerTitle>
+    <DrawerSubtitle>From a total number of {Intl.NumberFormat().format(db.chars.length)}.</DrawerSubtitle>
   </DrawerHeader>
   <DrawerContent>
-    <List>
-      <ListSubheader component={H6}>Filter By Group</ListSubheader>
-      <ListItem activated={!selectedGroup} on:SMUI:action={e => {
-          selectedGroup = null;
-          drawerOpen = false;
-          handleFilterGroupChange(e);
-        }}>
+    <List class="group-list-filter">
+      <ListItem activated={!selectedGroup}
+        on:SMUI:action={async _ => await selectGroup(null)}
+      >
+        <ListGraphic class="material-icons">select_all</ListGraphic>
         <ListText>All Groups</ListText>
       </ListItem>
       {#each groupChoices as group}
-        <ListItem activated={group === selectedGroup} on:SMUI:action={e => {
-          selectedGroup = group;
-          drawerOpen = false;
-          handleFilterGroupChange(e);
-        }}>
-          <ListText>{group.reprchar} {group.name}</ListText>
-        </ListItem>
+      <ListItem activated={group === selectedGroup}
+        on:SMUI:action={async _ => await selectGroup(group)}
+      >
+        <ListText class="list-text-looks-like-list-graphic">{group.reprchar}</ListText>
+        <ListText>{group.name}</ListText>
+      </ListItem>
       {/each}
       </List>
   </DrawerContent>
@@ -74,7 +72,7 @@
         </ChipSet>
       </Section>
       <Section align="end" toolbar class="respond-under-media-md">
-        <IconButton class="material-icons" on:click={e => drawerOpen = true}>menu</IconButton>
+        <IconButton class="material-icons material-icons-filled" on:click={e => drawerOpen = true}>auto_awesome_motion</IconButton>
       </Section>
     </Row>
 
@@ -154,11 +152,13 @@
     AppContent as DrawerAppContent,
     Header as DrawerHeader,
     Title as DrawerTitle,
+    Subtitle as DrawerSubtitle,
     Content as DrawerContent,
     Scrim as DrawerScrim,
   } from '@smui/drawer';
   import List, {
     Item as ListItem,
+    Graphic as ListGraphic,
     Text as ListText,
     Subheader as  ListSubheader,
   } from '@smui/list';
@@ -230,7 +230,13 @@
     await handleFilterGroupChange(e);
   }
 
-  async function handleFilterGroupChange(e) {
+  async function selectGroup (group: EmojiGroup | null) {
+    selectedGroup = group;
+    drawerOpen = false;
+    await handleFilterGroupChange();
+  }
+
+  async function handleFilterGroupChange(e?) {
     inQuery = true;
     clearTimeout(keyDownRefilterTimout);
     setTimeout(async () => {

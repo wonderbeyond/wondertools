@@ -3,10 +3,10 @@ default:
 
 MY_SMUI_THEMED = dist/my-smui.css
 
-emoji-data.yaml:
+emoji-data.yaml: scripts/gen-emoji-data.py
 	python3 scripts/gen-emoji-data.py > emoji-data.yaml
 
-emoji-data.ts: emoji-data.yaml
+emoji-data.ts: emoji-data.yaml scripts/gen-ts-code.py
 	python3 scripts/gen-ts-code.py -s emoji-data.yaml -o emoji-data.ts
 
 $(MY_SMUI_THEMED): src/theme/*.scss
@@ -16,5 +16,5 @@ $(MY_SMUI_THEMED): src/theme/*.scss
 dev: emoji-data.ts $(MY_SMUI_THEMED)
 	webpack serve
 
-build:
+build: emoji-data.ts $(MY_SMUI_THEMED)
 	webpack --mode production

@@ -47776,7 +47776,7 @@ chars:
 groups:
 - abbr: SE
   name: Smileys & Emotion
-  reprchar: 😄
+  reprchar: 🤪
 - abbr: S
   name: Symbols
   reprchar: 💱
@@ -47788,7 +47788,7 @@ groups:
   reprchar: 🕍
 - abbr: AN
   name: Animals & Nature
-  reprchar: 🐶
+  reprchar: 🐅
 - abbr: C
   name: Component
   reprchar: 🦰
@@ -47803,7 +47803,7 @@ groups:
   reprchar: 🥑
 - abbr: OB
   name: Objects
-  reprchar: 🩰
+  reprchar: 🥻
 - abbr: FaS
   name: face-smiling
   parent: SE

@@ -182,6 +182,16 @@ $breakpoint-names-last: nth($breakpoint-names, length($breakpoint-names));
   }
 }
 
+.list-text-looks-like-list-graphic {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  font-size: 1.25em;
+  margin-right: 32px;
+}
+
 .search-box-container {
   flex: 1 1.2 20em;
   padding-left: 1.5em;
@@ -269,6 +279,7 @@ $breakpoint-names-last: nth($breakpoint-names, length($breakpoint-names));
 }
 
 .emoji-cell {
+  overflow: hidden;
   user-select: none;
   cursor: pointer;
 
