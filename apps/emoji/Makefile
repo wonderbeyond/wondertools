@@ -18,3 +18,4 @@ dev: emoji-data.ts $(MY_SMUI_THEMED)
 
 build: emoji-data.ts $(MY_SMUI_THEMED)
 	webpack --mode production
+	cp -r public/* dist
