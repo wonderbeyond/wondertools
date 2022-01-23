@@ -19,3 +19,10 @@ dev: emoji-data.ts $(MY_SMUI_THEMED)
 build: emoji-data.ts $(MY_SMUI_THEMED)
 	webpack --mode production
 	cp -r public/* dist
+
+release: build
+	node scripts/mk-release.js
+
+clean:
+	rm -rf dist
+	rm -rf emoji-data.yaml emoji-data.ts

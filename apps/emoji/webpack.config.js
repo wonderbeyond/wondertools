@@ -1,9 +1,14 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const sveltePreprocess = require('svelte-preprocess');
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-module.exports = {
+import path from 'path';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import sveltePreprocess from 'svelte-preprocess';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+export default {
   mode: 'development',
   entry: './src/index.js',
   output: {
