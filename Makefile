@@ -8,6 +8,8 @@ build:
 	webpack --mode production
 	cp CNAME dist/
 
-gh-pages:
-	npm run build
+install-apps: apps.yaml
+	node scripts/install-apps.js
+
+gh-pages: build install-apps
 	gh-pages -d dist -b gh-pages
