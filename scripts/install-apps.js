@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import YAML from 'yaml';
 import shell from 'shelljs';
-import axios from 'axios';
+import superagent from 'superagent';
 
 const apps = YAML.parse(fs.readFileSync('apps.yaml', 'utf-8'))
 const cacheDir = path.join(os.homedir(), '.cache/wondertools/apps')
@@ -23,13 +23,8 @@ for (const app of apps) {
     console.log(`Use existing ${downloadPath}`);
   } else {
     console.log(`Fetching ${downloadUrl}`);
-    const resp = await axios({
-      method: 'get',
-      url: downloadUrl,
-      responseType: 'stream',
-    });
-
-    resp.data.pipe(fs.createWriteStream(downloadPath))
+    const resp = await superagent.get(downloadUrl).responseType('blob');
+    fs.writeFileSync(downloadPath, resp.body);
     console.log(`Written to ${downloadPath}`);
   }
 
