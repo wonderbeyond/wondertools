@@ -1,6 +1,6 @@
-const autoPreprocess = require('svelte-preprocess');
+import autoPreprocess from 'svelte-preprocess';
 
-module.exports = {
+export default {
   preprocess: autoPreprocess({
     scss: { includePaths: ['src', 'node_modules'] },
   }),

@@ -6,25 +6,23 @@ export function longpress(node: HTMLElement, duration: number) {
   let pressing = false;
   let isLong = false;
 
-  function resetState(e?: Event) {
+  function resetState(e: Event) {
     isLong = false;
     pressing = false;
     clearTimeout(timer);
   }
 
-  function handlePressdown(e?: Event) {
+  function handlePressdown(e: Event) {
     if (pressing) { return } else { pressing = true }
 
     timer = setTimeout(() => {
       isLong = true;
-      node.dispatchEvent(
-        new CustomEvent('longpress')
-      );
-      resetState();
+      e.target.dispatchEvent(new CustomEvent('longpress', {bubbles: true}));
+      resetState(e);
     }, duration);
   };
 
-  function handlePressup(e?: Event) {
+  function handlePressup(e: Event) {
     if (pressing) {
       // This is necessary, or it may caused the newly-opened
       // smui-dialog closed immediately.
@@ -34,11 +32,9 @@ export function longpress(node: HTMLElement, duration: number) {
     if (!pressing) { return }
 
     if (!isLong) {
-      node.dispatchEvent(
-        new CustomEvent('shortpress')
-      );
+      e.target.dispatchEvent(new CustomEvent('shortpress', {bubbles: true}));
     }
-    resetState();
+    resetState(e);
   };
 
   node.addEventListener('mousedown', handlePressdown);

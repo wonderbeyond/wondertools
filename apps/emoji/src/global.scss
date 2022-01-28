@@ -272,8 +272,8 @@ $breakpoint-names-last: nth($breakpoint-names, length($breakpoint-names));
   }
 }
 
-.mdc-emoji-cell {
-  &.emoji-not-matched {
+.emoji-grid-container {
+  .emoji-not-matched {
     display: none;
   }
 }

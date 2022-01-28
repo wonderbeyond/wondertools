@@ -83,23 +83,17 @@
 
   <AutoAdjust {topAppBar}></AutoAdjust>
 
-  <LayoutGrid>
-    {#each db.chars as emoji, i}
-      <Cell span={1}
-        class="mdc-emoji-cell {(filteredChars === undefined || filteredChars.has(emoji.char)) ? 'emoji-matched': 'emoji-not-matched'}">
-        <div class="emoji-cell" class:active={activeEmoji == emoji} title={emoji.name}
-          use:longpress={300}
-          on:shortpress={async e => {
-            activeEmoji = emoji;
-            showEmojiCard = true;
-          }} on:longpress={e => (
-            activeEmoji = emoji,
-            copyActiveEmojiToClipboard()
-          )}
-        >{emoji.char}</div>
-      </Cell>
-    {/each}
-  </LayoutGrid>
+  <div class="emoji-grid-container" use:longpress={300} on:shortpress={handleEmojiGridShortpress} on:longpress={handleEmojiGridLongpress}>
+    <LayoutGrid>
+      {#each db.chars as emoji, i}
+        <Cell span={1}
+          class="{(filteredChars === undefined || filteredChars.has(emoji.char)) ? '': 'emoji-not-matched'}"
+        >
+          <div data-emoji-index={i} class="emoji-cell" title={emoji.name} class:active={activeEmoji == emoji}>{emoji.char}</div>
+        </Cell>
+      {/each}
+    </LayoutGrid>
+  </div>
 </DrawerAppContent>
 
 <Dialog class="emoji-card" bind:open={showEmojiCard} on:SMUIDialog:closed={emojiCardClosedHook}>
@@ -203,6 +197,22 @@
   async function emojiCardClosedHook(e) {
     activeEmoji = null;
     snackbarAboutEmojiCopied && snackbarAboutEmojiCopied.close();
+  }
+
+  async function handleEmojiGridShortpress(e: CustomEvent) {
+    const cell: HTMLElement = (e.target as HTMLElement).closest('.emoji-cell');
+    if (!cell) return;
+    activeEmoji = db.chars[+cell.dataset.emojiIndex];
+    showEmojiCard = true;
+    e.stopPropagation();
+  }
+
+  async function handleEmojiGridLongpress(e: CustomEvent) {
+    const cell: HTMLElement = (e.target as HTMLElement).closest('.emoji-cell');
+    if (!cell) return;
+    activeEmoji = db.chars[+cell.dataset.emojiIndex];
+    copyActiveEmojiToClipboard();
+    e.stopPropagation();
   }
 
   async function copyActiveEmojiToClipboard() {
