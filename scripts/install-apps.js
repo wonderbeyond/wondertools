@@ -28,7 +28,7 @@ for (const app of apps) {
     console.log(`Written to ${downloadPath}`);
   }
 
-  let res = shell.exec(`mkdir -p ${installTarget} && unzip -f ${downloadPath} -d ${installTarget}`);
+  let res = shell.exec(`mkdir -p ${installTarget} && unzip -of ${downloadPath} -d ${installTarget}`);
   if (res.code !== 0) {
     throw new Error(res.stderr);
   } else {
